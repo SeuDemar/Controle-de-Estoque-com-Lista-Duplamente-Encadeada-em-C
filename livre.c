@@ -13,12 +13,8 @@ void gotoxy(int x, int y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void Menu_Cadastro_Produto() 
-{
-
-}
 // Mostra a Tela Padrao
-void tela()
+void telaprincipal()
 {
     int t;
     system("color 0e");
@@ -51,44 +47,6 @@ void tela()
     printf("MSG.:");
     gotoxy(01, 24);
     printf("+-----------------------------------------------------------------------------+");
-}
-
-void telaMenuCadProd () 
-{
-    int opc2;
-
-    tela();
-    
-    gotoxy(03, 5);
-    printf("1 - Cadastrar Produto no Final da Lista");
-    gotoxy(03, 6);
-    printf("2 - Cadastrar Produto no Inicio da Lista");
-    gotoxy(03, 7);
-    printf("3 - Cadastrar Produto em Uma Posicao da Lista");
-    gotoxy(03, 8);
-    printf("4 - Remover Produto em Uma Posicao da Lista");
-    gotoxy(03, 9);
-    printf("5 - Remover Produto na posicao da Lista");
-    gotoxy(03, 10);
-    printf("6 - Remover Produto no Inicio da Lista ");
-    gotoxy(03, 11);
-    printf("7 - Consultar Todos os Produtos");
-    gotoxy(03, 12);
-    printf("8 - Alterar Dados do Produto");
-    gotoxy(03, 13);
-    printf("9 - Retornar ao Menu Principal");
-    scanf("%d", &opc2);
-
-    switch (opc2)
-    {
-    case 1:
-
-        break;
-    
-    default:
-        break;
-    }
-
 }
 
 // Área de declaração sobre coisas relacionadas a produtos 
@@ -145,17 +103,116 @@ typedef struct
     TipoApontador_movim Ult_movim;       
 } TipoLista_movim;
 
+void telaMenuCadProd () 
+{
+    int opc2;
 
+    telaprincipal();
+    
+    gotoxy(03, 5);
+    printf("1 - Cadastrar Produto no Final da Lista");
+    gotoxy(03, 6);
+    printf("2 - Cadastrar Produto no Inicio da Lista");
+    gotoxy(03, 7);
+    printf("3 - Cadastrar Produto em Uma Posicao da Lista");
+    gotoxy(03, 8);
+    printf("4 - Remover Produto em Uma Posicao da Lista");
+    gotoxy(03, 9);
+    printf("5 - Remover Produto na posicao da Lista");
+    gotoxy(03, 10);
+    printf("6 - Remover Produto no Inicio da Lista ");
+    gotoxy(03, 11);
+    printf("7 - Consultar Todos os Produtos");
+    gotoxy(03, 12);
+    printf("8 - Alterar Dados do Produto");
+    gotoxy(03, 13);
+    printf("9 - Retornar ao Menu Principal");
+    scanf("%d", &opc2);
+
+    switch (opc2)
+    {
+    case 1:
+
+        break;
+    
+    default:
+        break;
+    }
+
+}
+
+void telaMenuMovim ()
+{
+    int opc3;
+
+    tela();
+    gotoxy(03, 5);
+    printf("1 - Cadastrar Movimentacao de Estoque");
+    gotoxy(03, 6);
+    printf("2 - Lista Movimentacao de Estoque");
+    gotoxy(03, 7);
+    printf("3 - Retornar ao Menu Principal");
+
+    switch (opc3)
+    {
+    case 1:
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    
+    default:
+        break;
+    }
+}
+
+void iniciarListaProd(TipoLista_Prod *Lista)
+{
+    Lista->Pri_movim = NULL;
+    Lista->Ult_movim = NULL; 
+}
+
+void iniciarListaMovim(TipoLista_movim *Lista)
+{
+    Lista->Pri_movim = NULL;
+    Lista->Ult_movim = NULL;
+}
+
+void inserirProduto(TipoLista_Prod *lista, reg_produto produto)
+{
+    TipoApontador novo = (TipoApontador)malloc(sizeof(TipoItem));
+
+    novo->conteudo = produto;
+    novo->proximo = NULL;
+
+    if (lista->Pri_movim == NULL)
+    {
+        lista->Pri_movim = novo;
+    } else {
+        TipoApontador atual = lista->Pri_movim;
+
+        while (atual->proximo != NULL)
+        {
+            atual = atual->proximo;
+        }
+        atual->proximo = novo;
+    }
+}
 
 int main () {
     int opc;
 
-    do
-    {
-        setlocale(LC_ALL, "pt_BR.UTF-8");
+    TipoLista_Prod  Lista_prod;
+    TipoLista_movim Lista_movim;
+
+    iniciarListaProd(&Lista_prod);
+    iniciarListaMovim(&Lista_movim);
+    
+    do {
     tela();
     gotoxy(03, 5);
-    printf("1 - Menu de cadastros");
+    printf("1 - Menu de Cadastros de Produtos ");
     gotoxy(03, 6);
     printf("2 - Menu de Movimentacao de Estoque");
     gotoxy(03, 7);
@@ -169,7 +226,7 @@ int main () {
         telaMenuCadProd();
             break;
         case 2:
-
+        telaMenuMovim();
             break;
 
         case 3:
@@ -182,4 +239,5 @@ int main () {
     } while (opc != 3);
 
     return 0;
+    
 }
