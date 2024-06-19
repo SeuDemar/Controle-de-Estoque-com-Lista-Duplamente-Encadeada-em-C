@@ -8,8 +8,6 @@ Objetivo.: Criar um Controle de Estoque
 #include <locale.h>
 #include <conio.h>
 
-#define MAX 10;
-
 // Área de declaração sobre coisas relacionadas aos produtos da lista
 typedef struct reg_produto
 {
@@ -117,8 +115,9 @@ void CadastrarProdutoNoFinal(TipoLista_Prod *lista) {
     TipoApontador novoProduto = (TipoApontador)malloc(sizeof(TipoItem));
 
     if (novoProduto == NULL) {
-        gotoxy(02, 5);
+        gotoxy(07, 23);
         printf("Erro ao alocar memória para novo produto.");
+        getch();
         return;
     }
 
@@ -535,7 +534,7 @@ void EditarProduto(TipoLista_Prod *lista) {
     if (opcao == 'S' || opcao == 's') {
         gotoxy(3, 13);
         printf("Digite a nova descricao do produto........: ");
-        while (getchar() != '\n');  // Limpar o buffer
+        while (getchar() != '\n');  
         fgets(atual->conteudo.ds_Produto, sizeof(atual->conteudo.ds_Produto), stdin);
         atual->conteudo.ds_Produto[strcspn(atual->conteudo.ds_Produto, "\n")] = '\0';
 
@@ -547,7 +546,6 @@ void EditarProduto(TipoLista_Prod *lista) {
         printf("Digite a nova data de validade (DDMMAAAA).: ");
         scanf("%s", atual->conteudo.dt_Validade);
 
-        // Recalcular o valor total
         atual->conteudo.vl_Total = atual->conteudo.qt_Produto * atual->conteudo.vl_Customedio;
 
         gotoxy(7, 23);
@@ -571,7 +569,7 @@ void armazenarMovimentacao(TipoLista_movim *lista_movimentacoes) {
     }
     
     // Solicita ao usuário os dados da movimentação
-    tela();  // Limpa a tela e posiciona o cursor no topo
+    tela(); 
     gotoxy(3, 5);
     printf("Digite o codigo do produto..............: ");
     scanf("%d", &novo_item->conte_Movim.cd_Prod_Movim);
@@ -584,7 +582,7 @@ void armazenarMovimentacao(TipoLista_movim *lista_movimentacoes) {
 
     gotoxy(3, 7);
     printf("Digite o tipo da movimentacao...........: ");
-    scanf(" %c", &novo_item->conte_Movim.tp_Movim); // Lê um único caractere
+    scanf(" %c", &novo_item->conte_Movim.tp_Movim);
     while (getchar() != '\n');
 
     gotoxy(3, 8);
@@ -643,8 +641,8 @@ void ListarMovimentacoes(TipoLista_movim *lista_movimentacoes) {
         printf("|           |                 |           |         |              |");
     } 
 
-    TipoItem_movim *atual = lista_movimentacoes->Pri_movim; // Inicialização correta do ponteiro
-    while (atual != NULL) {  // Percorre a lista inteira
+    TipoItem_movim *atual = lista_movimentacoes->Pri_movim; 
+    while (atual != NULL) {  
         gotoxy(2, linha);
         printf("%d", atual->conte_Movim.cd_Prod_Movim);
         gotoxy(14, linha);
@@ -661,7 +659,8 @@ void ListarMovimentacoes(TipoLista_movim *lista_movimentacoes) {
         linha++;
         atual = atual->proximo_Movim; // Avança para a próxima movimentação na lista
 
-        if (linha > 20) { // Verifica se a linha ultrapassou o limite da tela
+        if (linha > 20) { 
+            // Verifica se a linha ultrapassou o limite da tela
             gotoxy(7, 23);
             printf("Pressione enter para ir para a próxima pagina...");
             getch();
@@ -670,11 +669,13 @@ void ListarMovimentacoes(TipoLista_movim *lista_movimentacoes) {
             printf("Codigo  |  Data Movimentacao  |  Tipo  |  Quantidade  |  Valor Unitario  |  Valor Total");
             gotoxy(1, 6);
             printf("+-----------------------------------------------------------------------------+");
-            linha = 7; // Reinicia a contagem de linhas
+            linha = 7;
+             // Reinicia a contagem de linhas
         }
     }
 
-    gotoxy(7, 23); // Ajusta a posição para a mensagem de fim da lista
+    // Ajusta a posição para a mensagem de fim da lista
+    gotoxy(7, 23); 
     printf("Fim da lista. Pressione qualquer tecla para sair...");
     getch();
 }
