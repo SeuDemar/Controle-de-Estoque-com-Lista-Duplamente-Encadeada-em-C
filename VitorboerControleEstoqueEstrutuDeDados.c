@@ -10,6 +10,7 @@ Objetivo.: Criar um Controle de Estoque
 
 #define MAX 10;
 
+// Área de declaração sobre coisas relacionadas aos produtos da lista
 typedef struct reg_produto
 {
     int   cd_Produto;
@@ -36,7 +37,7 @@ typedef struct
     TipoApontador Ult_movim;
 }TipoLista_Prod;
 
-// Área de declaração sobre coisas relacionadas a movimentos 
+// Área de declaração sobre coisas relacionadas aos movimentos da lista
 typedef struct reg_movim
 {
     char  dt_Movim[11];
@@ -63,7 +64,7 @@ typedef struct TipoLista_movim
     TipoApontador_movim Ult_movim;       
 } TipoLista_movim;
 
-// Configurando a função GOTOXy
+// Configurando a função GOTOXY
 void gotoxy(int x, int y)
 {
     COORD coord;
@@ -72,7 +73,7 @@ void gotoxy(int x, int y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-// Mostra a Tela Padrao
+// Mostra a Tela Padrao chamada em várias funções
 void tela()
 {
     int t;
@@ -108,6 +109,7 @@ void tela()
     printf("+-----------------------------------------------------------------------------+");
 }
 
+// cadastra o produto no final da lista de produtos
 void CadastrarProdutoNoFinal(TipoLista_Prod *lista) {
     tela();
     
@@ -120,6 +122,7 @@ void CadastrarProdutoNoFinal(TipoLista_Prod *lista) {
         return;
     }
 
+    // Área para pegar entradas do usuário
     gotoxy(3, 5);
     printf("Digite o codigo do produto.........: ");
     scanf("%d", &novoProduto->conteudo.cd_Produto);
@@ -128,25 +131,18 @@ void CadastrarProdutoNoFinal(TipoLista_Prod *lista) {
     printf("Digite a descricao do produto......: ");
     fgets(novoProduto->conteudo.ds_Produto, sizeof(novoProduto->conteudo.ds_Produto), stdin);
     novoProduto->conteudo.ds_Produto[strcspn(novoProduto->conteudo.ds_Produto, "\n")] = '\0';
-    //scanf(" %[^]s", novoProduto->conteudo.ds_Produto);
+
     gotoxy(3, 7); 
     printf("Digite a unidade de medida.........: ");
     scanf("%s", novoProduto->conteudo.ds_Unid_med);
     gotoxy(3, 8);
     printf("Digite a data de validade DDMMAAAA.: ");
     scanf("%s", novoProduto->conteudo.dt_Validade);
-    
-    /*(gotoxy(3, 9);
-    printf("Digite a quantidade do produto.....: ");
-    scanf("%f", &novoProduto->conteudo.qt_Produto);
-    gotoxy(3, 10);
-    printf("Digite o valor custo medio.........: ");
-    scanf("%f", &novoProduto->conteudo.vl_Customedio);
 
-    while (getchar() != '\n');
-
-    // Calcula o valor total
-    novoProduto->conteudo.vl_Total = novoProduto->conteudo.qt_Produto * novoProduto->conteudo.vl_Customedio;*/
+    // Colocando zero nos valores da lista 
+    novoProduto->conteudo.qt_Produto = 0;
+    novoProduto->conteudo.vl_Customedio = 0;
+    novoProduto->conteudo.vl_Total = 0;
 
     // Define o próximo item como NULL (pois será o último item da lista)
     novoProduto->proximo = NULL;
@@ -156,6 +152,7 @@ void CadastrarProdutoNoFinal(TipoLista_Prod *lista) {
         lista->Pri_movim = novoProduto;
         lista->Ult_movim = novoProduto;
     } else {
+        
         // Atualiza o próximo do último item atual e o último item da lista
         lista->Ult_movim->proximo = novoProduto;
         lista->Ult_movim = novoProduto;
@@ -166,6 +163,7 @@ void CadastrarProdutoNoFinal(TipoLista_Prod *lista) {
     getch();
 }
 
+// Função para cadastrar produto no final 
 void CadastrarProdutoNoInicio(TipoLista_Prod *lista) {
     TipoApontador novoProduto = (TipoApontador)malloc(sizeof(TipoItem));
 
@@ -176,7 +174,7 @@ void CadastrarProdutoNoInicio(TipoLista_Prod *lista) {
     }
     tela();
 
-    // Get input for new product
+    // Pegar entradas do usuário nvamente
     gotoxy(3, 5);
     printf("Digite o codigo do produto.........: ");
     scanf("%d", &novoProduto->conteudo.cd_Produto);
@@ -193,16 +191,12 @@ void CadastrarProdutoNoInicio(TipoLista_Prod *lista) {
     printf("Digite a data de validade DDMMAAAA.: ");
     scanf("%s", novoProduto->conteudo.dt_Validade);
     gotoxy(3, 9);
-    /*printf("Digite a quantidade do produto.....: ");
-    scanf("%f", &novoProduto->conteudo.qt_Produto);
-    gotoxy(3, 10);
-    printf("Digite o valor custo medio.........: ");
-    scanf("%f", &novoProduto->conteudo.vl_Customedio);
 
-    while (getchar() != '\n');
+    // Decalrando 0 nas variaveis novamente
+    novoProduto->conteudo.qt_Produto = 0;
+    novoProduto->conteudo.vl_Customedio = 0;
+    novoProduto->conteudo.vl_Total = 0;
 
-    // Calcula o valor total
-    novoProduto->conteudo.vl_Total = novoProduto->conteudo.qt_Produto * novoProduto->conteudo.vl_Customedio;*/
 
     // Define o próximo item como o atual primeiro item
     novoProduto->proximo = lista->Pri_movim;
@@ -220,7 +214,7 @@ void CadastrarProdutoNaPosicao(TipoLista_Prod *lista)
 
     int pos, i;
     gotoxy(3, 5);
-    printf("Digite a posição em que deseja inserir o produto: ");
+    printf("Digite a posicao em que deseja inserir o produto: ");
     scanf("%d", &pos);
 
     TipoApontador novoProduto = (TipoApontador)malloc(sizeof(TipoItem));
@@ -247,16 +241,12 @@ void CadastrarProdutoNaPosicao(TipoLista_Prod *lista)
     printf("Digite a data de validade (DD/MM/AAAA).: ");
     scanf("%s", novoProduto->conteudo.dt_Validade);
     gotoxy(3, 10);
-    /*printf("Digite a quantidade do produto.........: ");
-    scanf("%f", &novoProduto->conteudo.qt_Produto);
-    gotoxy(3, 11);
-    printf("Digite o valor custo medio.............: ");
-    scanf("%f", &novoProduto->conteudo.vl_Customedio);
 
-    while (getchar() != '\n')
-        ;
+    // Decalrando 0 novamente a variaveis
+    novoProduto->conteudo.qt_Produto = 0;
+    novoProduto->conteudo.vl_Customedio = 0;
+    novoProduto->conteudo.vl_Total = 0;
 
-    novoProduto->conteudo.vl_Total = novoProduto->conteudo.qt_Produto * novoProduto->conteudo.vl_Customedio;*/
 
     if (pos == 1)
     {
@@ -301,23 +291,25 @@ void CadastrarProdutoNaPosicao(TipoLista_Prod *lista)
     }
 
     gotoxy(7, 23);
-    printf("Produto inserido na posição %d com sucesso!\n", pos);
+    printf("Produto inserido na posicao %d com sucesso!", pos);
     getch();
 }
 
+
+// Remove o produto na posicação especifíca que o usúario queira 
 void RemoverProdutoNaPosicao(TipoLista_Prod *lista)
 {
     tela();
 
     int pos, i;
     gotoxy(3, 5);
-    printf("Digite a posição do produto que deseja remover: ");
+    printf("Digite a posicao do produto que deseja remover: ");
     scanf("%d", &pos);
 
     if (lista->Pri_movim == NULL)
     {
         gotoxy(3, 6);
-        printf("A lista está vazia. Nenhum produto para remover.\n");
+        printf("A lista esta vazia. Nenhum produto para remover.");
         getch();
         return;
     }
@@ -345,7 +337,7 @@ void RemoverProdutoNaPosicao(TipoLista_Prod *lista)
         if (atual == NULL)
         {
             gotoxy(3, 6);
-            printf("Posição inválida. Nenhum produto removido.\n");
+            printf("Posicao invalida. Nenhum produto removido.\n");
             getch();
             return;
         }
@@ -359,9 +351,11 @@ void RemoverProdutoNaPosicao(TipoLista_Prod *lista)
     }
 
     gotoxy(7, 23);
-    printf("Produto removido da posição %d com sucesso!", pos);
+    printf("Produto removido da posicao %d com sucesso!", pos);
     getch();
 }
+
+
 
 void RemoverProdutoNoFinal(TipoLista_Prod *lista)
 {
@@ -370,7 +364,7 @@ void RemoverProdutoNoFinal(TipoLista_Prod *lista)
     if (lista->Pri_movim == NULL)
     {
         gotoxy(3, 6);
-        printf("A lista está vazia. Nenhum produto para remover.\n");
+        printf("A lista esta vazia. Nenhum produto para remover.\n");
         getch();
         return;
     }
@@ -412,7 +406,7 @@ void RemoverProdutoNoInicio(TipoLista_Prod *lista)
     if (lista->Pri_movim == NULL)
     {
         gotoxy(3, 6);
-        printf("A lista está vazia. Nenhum produto para remover.");
+        printf("A lista esta vazia. Nenhum produto para remover.");
         getch();
         return;
     }
@@ -572,7 +566,7 @@ void armazenarMovimentacao(TipoLista_movim *lista_movimentacoes) {
     TipoItem_movim *novo_item = (TipoItem_movim*)malloc(sizeof(TipoItem_movim));
     
     if (novo_item == NULL) {
-        printf("Erro ao alocar memória para o novo item de movimentação\n");
+        printf("Erro ao alocar memória para o novo item de movimentacao");
         return;
     }
     
@@ -669,7 +663,7 @@ void ListarMovimentacoes(TipoLista_movim *lista_movimentacoes) {
 
         if (linha > 20) { // Verifica se a linha ultrapassou o limite da tela
             gotoxy(7, 23);
-            printf("Pressione enter para ir para a próxima página...");
+            printf("Pressione enter para ir para a próxima pagina...");
             getch();
             tela();
             gotoxy(2, 5);
@@ -746,7 +740,7 @@ void telaMenuCadProd(TipoLista_Prod *lista) {
                 return;
             default:
                 gotoxy(7, 23);
-                printf("Opção Inválida. Tente Novamente.");
+                printf("Opcao Invalida. Tente Novamente.");
                 break;
         }
     } while (opc2 != 9);
@@ -780,7 +774,7 @@ void telaMenuMovimentacao(TipoLista_movim *lista_movimentacoes) {
                 return;
             default:
                 gotoxy(7, 23);
-                printf("Opção Inválida. Tente Novamente.");
+                printf("Opção Invalida. Tente Novamente.");
                 break;
         }
     } while (opc4 != 3);
